@@ -63,7 +63,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 	// Initialize the model object.
-	result = m_Model->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), "./stone01.tga");
+	result = m_Model->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), "./stone01.tga", "./cube.txt");
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
@@ -174,7 +174,7 @@ bool GraphicsClass::Frame()
 	static float rotation = 0.0f;
 
 	// Update the rotation variable each frame.
-	rotation += (float)XM_PI * 0.05f;
+	rotation += (float)XM_PI * 0.01f;
 	if (rotation > 360.0f)
 	{
 		rotation -= 360.0f;

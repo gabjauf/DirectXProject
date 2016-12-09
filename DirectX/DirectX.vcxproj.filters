@@ -20,6 +20,9 @@
     <Filter Include="textures">
       <UniqueIdentifier>{a237530a-0745-4d30-9547-a758bf37965e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Models">
+      <UniqueIdentifier>{048590fe-43be-41cc-ab67-8c824f01e322}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="d3dclass.cpp">
@@ -120,5 +123,10 @@
     <Image Include="stone01.tga">
       <Filter>textures</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="cube.txt">
+      <Filter>Models</Filter>
+    </Text>
   </ItemGroup>
 </Project>
