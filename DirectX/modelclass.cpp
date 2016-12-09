@@ -77,10 +77,10 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	HRESULT result;
 
 	// Set the number of vertices in the vertex array.
-	m_vertexCount = 4;
+	m_vertexCount = 8;
 
 	// Set the number of indices in the index array.
-	m_indexCount = 6;
+	m_indexCount = 12;
 
 	// Create the vertex array.
 	vertices = new VertexType[m_vertexCount];
@@ -113,6 +113,22 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	vertices[3].texture = XMFLOAT2(1.0f, 1.0f);
 	vertices[3].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
 
+	vertices[4].position = XMFLOAT3(-1.0f, -1.0f, 0.0f);  // Bottom left.
+	vertices[4].texture = XMFLOAT2(0.0f, 1.0f);
+	vertices[4].normal = XMFLOAT3(0.0f, 0.0f, 1.0f);
+
+	vertices[5].position = XMFLOAT3(-1.0f, 1.0f, 0.0f);  // Top left.
+	vertices[5].texture = XMFLOAT2(0.0f, 0.0f);
+	vertices[5].normal = XMFLOAT3(0.0f, 0.0f, 1.0f);
+
+	vertices[6].position = XMFLOAT3(1.0f, 1.0f, 0.0f);  // top right.
+	vertices[6].texture = XMFLOAT2(1.0f, 0.0f);
+	vertices[6].normal = XMFLOAT3(0.0f, 0.0f, 1.0f);
+
+	vertices[7].position = XMFLOAT3(1.0f, -1.0f, 0.0f);  // Bottom right.
+	vertices[7].texture = XMFLOAT2(1.0f, 1.0f);
+	vertices[7].normal = XMFLOAT3(0.0f, 0.0f, 1.0f);
+
 	// Load the index array with data.
 	indices[0] = 0;  // Bottom left.
 	indices[1] = 1;  // Top middle.
@@ -120,6 +136,14 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	indices[3] = 0;
 	indices[4] = 2;
 	indices[5] = 3;
+
+	//BACK
+	indices[6] = 6;
+	indices[7] = 5;
+	indices[8] = 4;
+	indices[9] = 7;
+	indices[10] = 6;
+	indices[11] = 4;
 
 					 // Set up the description of the static vertex buffer.
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
