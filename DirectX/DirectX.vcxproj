@@ -68,34 +68,22 @@
     <ClInclude Include="zoneclass.h" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="color.vs">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </FxCompile>
+    <Text Include="font\font01.txt" />
+    <Text Include="model\cube.txt" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="color.ps">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <FileType>Document</FileType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-    </FxCompile>
+    <None Include="shader\color.ps" />
+    <None Include="shader\color.vs" />
+    <None Include="shader\font.ps" />
+    <None Include="shader\font.vs" />
+    <None Include="shader\light.ps" />
+    <None Include="shader\light.vs" />
+    <None Include="shader\texture.ps" />
+    <None Include="shader\texture.vs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="font.ps" />
-    <None Include="font.vs" />
-    <None Include="light.ps" />
-    <None Include="light.vs" />
-    <None Include="texture.ps" />
-    <None Include="texture.vs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="stone01.tga" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="cube.txt" />
+    <Image Include="font\font01.tga" />
+    <Image Include="texture\stone01.tga" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B7E44EFE-1F51-487D-9A3D-0AFEBA502CAE}</ProjectGuid>

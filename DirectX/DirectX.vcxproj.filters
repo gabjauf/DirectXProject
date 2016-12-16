@@ -5,10 +5,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Fichiers de ressources">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Sources">
       <UniqueIdentifier>{1eaeea18-0287-4807-b14c-840859023d2e}</UniqueIdentifier>
       <Extensions>cpp;</Extensions>
@@ -25,6 +21,13 @@
     </Filter>
     <Filter Include="font">
       <UniqueIdentifier>{a14d4c5c-d1cb-4725-9a75-f37a70301aba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers de ressources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Sources\shaders">
+      <UniqueIdentifier>{18e959a1-01be-40fd-b6f0-04e03398fc03}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -43,22 +46,13 @@
     <ClCompile Include="systemclass.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="colorshaderclass.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
     <ClCompile Include="modelclass.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="cameraclass.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="textureshaderclass.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
     <ClCompile Include="textureclass.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="lightshaderclass.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="lightclass.cpp">
@@ -85,9 +79,6 @@
     <ClCompile Include="fpsclass.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="fontshaderclass.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
     <ClCompile Include="userinterfaceclass.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
@@ -96,6 +87,18 @@
     </ClCompile>
     <ClCompile Include="fontclass.cpp">
       <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="colorshaderclass.cpp">
+      <Filter>Sources\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="lightshaderclass.cpp">
+      <Filter>Sources\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="textureshaderclass.cpp">
+      <Filter>Sources\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="fontshaderclass.cpp">
+      <Filter>Sources\shaders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -167,41 +170,45 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="color.vs">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="color.ps">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="texture.vs">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="texture.ps">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="light.vs">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="light.ps">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="font.vs">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="font.ps">
-      <Filter>Shaders</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="stone01.tga">
-      <Filter>textures</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="cube.txt">
+    <Text Include="model\cube.txt">
       <Filter>Models</Filter>
     </Text>
+    <Text Include="font\font01.txt">
+      <Filter>font</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shader\font.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shader\light.ps">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shader\light.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shader\texture.ps">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shader\texture.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shader\color.ps">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shader\color.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shader\font.ps">
+      <Filter>Shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="font\font01.tga">
+      <Filter>font</Filter>
+    </Image>
+    <Image Include="texture\stone01.tga">
+      <Filter>textures</Filter>
+    </Image>
   </ItemGroup>
 </Project>
