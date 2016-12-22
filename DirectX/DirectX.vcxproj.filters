@@ -100,6 +100,9 @@
     <ClCompile Include="fontshaderclass.cpp">
       <Filter>Sources\shaders</Filter>
     </ClCompile>
+    <ClCompile Include="diamondSquare.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="systemclass.h">
@@ -166,6 +169,9 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="fontclass.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="diamondSquare.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
