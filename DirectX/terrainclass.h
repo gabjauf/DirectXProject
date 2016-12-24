@@ -45,7 +45,7 @@ public:
 	TerrainClass(const TerrainClass&);
 	~TerrainClass();
 
-	bool Initialize(ID3D11Device * device, char * setupFilename);
+	bool Initialize(ID3D11Device * device);
 
 	void Shutdown();
 	bool Render(ID3D11DeviceContext*);
@@ -54,7 +54,6 @@ public:
 
 private:
 	bool LoadSetupFile(char*);
-	bool LoadBitmapHeightMap();
 	void ShutdownHeightMap();
 	void SetTerrainCoordinates();
 	bool BuildTerrainModel();
