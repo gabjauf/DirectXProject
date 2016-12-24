@@ -14,6 +14,7 @@
 #include <stdio.h>
 
 #include "diamondSquare.h"
+#include "cameraclass.h"
 
 using namespace DirectX;
 using namespace std;
@@ -48,7 +49,7 @@ public:
 	bool Initialize(ID3D11Device * device);
 
 	void Shutdown();
-	bool Render(ID3D11DeviceContext*);
+	bool Render(ID3D11DeviceContext*, CameraClass*);
 
 	int GetIndexCount();
 
@@ -61,7 +62,8 @@ private:
 
 	bool InitializeBuffers(ID3D11Device*);
 	void ShutdownBuffers();
-	void RenderBuffers(ID3D11DeviceContext*);
+	void RenderBuffers(ID3D11DeviceContext*, CameraClass*);
+	bool UpdateBuffers(ID3D11DeviceContext*, CameraClass*);
 
 	bool LoadDiamondSquareHeightMap();
 
