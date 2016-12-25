@@ -253,7 +253,7 @@ bool TerrainClass::InitializeBuffers(ID3D11Device* device)
 	HRESULT result;
 	XMFLOAT4 color;
 
-
+	/*
 	// Set the color of the terrain grid.
 	color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 
@@ -319,6 +319,7 @@ bool TerrainClass::InitializeBuffers(ID3D11Device* device)
 			indices[index] = index++;
 		}
 	}
+	*/
 
 	// Set up the description of the static vertex buffer.
 	vertexBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
@@ -329,12 +330,12 @@ bool TerrainClass::InitializeBuffers(ID3D11Device* device)
 	vertexBufferDesc.StructureByteStride = 0;
 
 	// Give the subresource structure a pointer to the vertex data.
-	vertexData.pSysMem = vertices;
-	vertexData.SysMemPitch = 0;
-	vertexData.SysMemSlicePitch = 0;
-
+	//vertexData.pSysMem = vertices;
+	//vertexData.SysMemPitch = 0;
+	//vertexData.SysMemSlicePitch = 0;
+	
 	// Now create the vertex buffer.
-	result = device->CreateBuffer(&vertexBufferDesc, &vertexData, &m_vertexBuffer);
+	result = device->CreateBuffer(&vertexBufferDesc, NULL, &m_vertexBuffer);
 	if (FAILED(result))
 	{
 		return false;
@@ -344,28 +345,28 @@ bool TerrainClass::InitializeBuffers(ID3D11Device* device)
 	indexBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 	indexBufferDesc.ByteWidth = sizeof(unsigned long) * m_indexCount;
 	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	vertexBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	indexBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	indexBufferDesc.MiscFlags = 0;
 	indexBufferDesc.StructureByteStride = 0;
 
 	// Give the subresource structure a pointer to the index data.
-	indexData.pSysMem = indices;
-	indexData.SysMemPitch = 0;
-	indexData.SysMemSlicePitch = 0;
+	//indexData.pSysMem = indices;
+	//indexData.SysMemPitch = 0;
+	//indexData.SysMemSlicePitch = 0;
 
 	// Create the index buffer.
-	result = device->CreateBuffer(&indexBufferDesc, &indexData, &m_indexBuffer);
+	result = device->CreateBuffer(&indexBufferDesc, NULL, &m_indexBuffer);
 	if (FAILED(result))
 	{
 		return false;
 	}
 
 	// Release the arrays now that the buffers have been created and loaded.
-	delete[] vertices;
-	vertices = 0;
-
-	delete[] indices;
-	indices = 0;
+	//delete[] vertices;
+	//vertices = 0;
+	//
+	//delete[] indices;
+	//indices = 0;
 
 	return true;
 }
@@ -424,12 +425,11 @@ bool TerrainClass::UpdateBuffers(ID3D11DeviceContext* deviceContext, CameraClass
 	unsigned long* indices;
 	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
 	D3D11_MAPPED_SUBRESOURCE vertexData, indexData;
-	HRESULT result;
 	XMFLOAT4 color;
 
 
 	// Set the color of the terrain grid.
-	color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	color = XMFLOAT4(1.0f, 1.0f, 0.5f, 1.0f);
 
 	// Calculate the number of vertices in the terrain.
 	m_vertexCount = (m_terrainWidth - 1) * (m_terrainHeight - 1) * 6;
@@ -455,18 +455,20 @@ bool TerrainClass::UpdateBuffers(ID3D11DeviceContext* deviceContext, CameraClass
 
 	int LOD = 50;
 	int index = 0;
+	int step = 1;
 	// Load the vertex array and index array with 3D terrain model data.
-	for (int i = 0; i < m_terrainWidth - 1 - i / LOD; i += abs(i - cameraPosition.x) / LOD + 1)
+	for (int i = 0; i < m_terrainWidth - step; i += step)
 	{
-		for (int j = 0; j < m_terrainHeight - j / LOD - 1; j += abs(j - cameraPosition.z) / LOD + 1)
+		
+		for (int j = 0; j < m_terrainHeight - step; j += step)
 		{
-			int iLod = (i % LOD) * (i + 1);
-			int jLod = (j % LOD) * (j + 1);
+			step = max(i / LOD + 1, j / LOD + 1);
 			// Get the indexes to the four points of the quad.
 			int index1 = (m_terrainWidth * j) + i;          // Upper left.
-			int index2 = (m_terrainWidth * j) + (i + i / LOD + 1);      // Upper right.
-			int index3 = (m_terrainWidth * (j + j / LOD + 1)) + i;      // Bottom left.
-			int index4 = (m_terrainWidth * (j + j / LOD + 1)) + (i + i / LOD + 1);  // Bottom right.
+			int index2 = (m_terrainWidth * j) + (i + step);      // Upper right.
+			int index3 = (m_terrainWidth * (j + step)) + i;      // Bottom left.
+			int index4 = (m_terrainWidth * (j + step)) + (i + step);  // Bottom right.
+			
 
 			vertices[index].position = XMFLOAT3(m_heightMap[index1].x, m_heightMap[index1].y, m_heightMap[index1].z);
 			vertices[index].color = color;
@@ -497,15 +499,22 @@ bool TerrainClass::UpdateBuffers(ID3D11DeviceContext* deviceContext, CameraClass
 	//	Disable GPU access to the vertex buffer data.
 	deviceContext->Map(m_vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &vertexData);
 	//	Update the vertex buffer here.
-	memcpy(vertexData.pData, vertices, sizeof(vertices));
+	memcpy(vertexData.pData, vertices, sizeof(VertexType) * m_vertexCount);
 	//	Reenable GPU access to the vertex buffer data.
 	deviceContext->Unmap(m_vertexBuffer, 0);
 
 	//	Disable GPU access to the vertex buffer data.
 	deviceContext->Map(m_indexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &indexData);
 	//	Update the vertex buffer here.
-	memcpy(indexData.pData, indices, sizeof(indices));
+	memcpy(indexData.pData, indices, sizeof(unsigned long) * m_indexCount);
 	//	Reenable GPU access to the vertex buffer data.
 	deviceContext->Unmap(m_indexBuffer, 0);
+
+	// Release the arrays now that the buffers have been created and loaded.
+	delete[] vertices;
+	vertices = 0;
+
+	delete[] indices;
+	indices = 0;
 
 }
