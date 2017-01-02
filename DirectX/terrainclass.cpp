@@ -426,10 +426,12 @@ bool TerrainClass::UpdateBuffers(ID3D11DeviceContext* deviceContext, CameraClass
 	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
 	D3D11_MAPPED_SUBRESOURCE vertexData, indexData;
 	XMFLOAT4 color;
+	XMFLOAT4 color2;
 
 
 	// Set the color of the terrain grid.
 	color = XMFLOAT4(1.0f, 1.0f, 0.5f, 1.0f);
+	color2 = XMFLOAT4(0.0f, 1.0f, 0.5f, 1.0f);
 
 	// Calculate the number of vertices in the terrain.
 	m_vertexCount = (m_terrainWidth - 1) * (m_terrainHeight - 1) * 6;
@@ -455,14 +457,39 @@ bool TerrainClass::UpdateBuffers(ID3D11DeviceContext* deviceContext, CameraClass
 
 	int LOD = 50;
 	int index = 0;
-	int step = 1;
+	int step = 2;
 	// Load the vertex array and index array with 3D terrain model data.
 	for (int i = 0; i < m_terrainWidth - step; i += step)
 	{
+		// i is the index of the diagonal
+		/*
+			|
+			o_ o_ o_ o <-- (i, i)
+			|		 |
+			o_ o_ o  o
+			|	  |  |
+			o_ o  o  o
+			|\ |  |  |
+			o_\o_ o_ o_ o_
+			
+			
+		*/
 		
-		for (int j = 0; j < m_terrainHeight - step; j += step)
+		for (int j = 0; j < i; j += step)
 		{
-			step = max(i / LOD + 1, j / LOD + 1);
+			/*
+			|
+			o_ o_ o_ o
+		    |		 | <- draw this line
+			o_ o_ o  o
+			|	  |  |
+			o_ o  o  o
+			|  |  |  |
+			o_ o_ o_ o_ o_
+
+
+			*/
+			//step = max(i / LOD, j / LOD) *  2 + 2;
 			// Get the indexes to the four points of the quad.
 			int index1 = (m_terrainWidth * j) + i;          // Upper left.
 			int index2 = (m_terrainWidth * j) + (i + step);      // Upper right.
@@ -493,7 +520,81 @@ bool TerrainClass::UpdateBuffers(ID3D11DeviceContext* deviceContext, CameraClass
 			vertices[index].position = XMFLOAT3(m_heightMap[index4].x, m_heightMap[index4].y, m_heightMap[index4].z);
 			vertices[index].color = color;
 			indices[index] = index++;
+
+			/*
+			|
+			o_ o_ o_ o
+			|		 |
+			o_ o_ o  o
+			|	  |  |
+			o_ o  o  o
+			|\ |  |  |
+			o_\o_ o_ o_ o_
+			       ^
+				   |
+				   Draw column
+			*/
+
+
+			index1 = (m_terrainWidth * i) + j;          // Upper left.
+			index2 = (m_terrainWidth * i) + (j + step);      // Upper right.
+			index3 = (m_terrainWidth * (i + step)) + j;      // Bottom left.
+			index4 = (m_terrainWidth * (i + step)) + (j + step);  // Bottom right.
+
+
+			vertices[index].position = XMFLOAT3(m_heightMap[index1].x, m_heightMap[index1].y, m_heightMap[index1].z);
+			vertices[index].color = color;
+			indices[index] = index++;
+
+			vertices[index].position = XMFLOAT3(m_heightMap[index2].x, m_heightMap[index2].y, m_heightMap[index2].z);
+			vertices[index].color = color;
+			indices[index] = index++;
+
+			vertices[index].position = XMFLOAT3(m_heightMap[index3].x, m_heightMap[index3].y, m_heightMap[index3].z);
+			vertices[index].color = color;
+			indices[index] = index++;
+
+			vertices[index].position = XMFLOAT3(m_heightMap[index3].x, m_heightMap[index3].y, m_heightMap[index3].z);
+			vertices[index].color = color;
+			indices[index] = index++;
+
+			vertices[index].position = XMFLOAT3(m_heightMap[index2].x, m_heightMap[index2].y, m_heightMap[index2].z);
+			vertices[index].color = color;
+			indices[index] = index++;
+
+			vertices[index].position = XMFLOAT3(m_heightMap[index4].x, m_heightMap[index4].y, m_heightMap[index4].z);
+			vertices[index].color = color;
+			indices[index] = index++;
 		}
+		int index1 = (m_terrainWidth * i) + i;          // Upper left.
+		int index2 = (m_terrainWidth * i) + (i + step);      // Upper right.
+		int index3 = (m_terrainWidth * (i + step)) + i;      // Bottom left.
+		int index4 = (m_terrainWidth * (i + step)) + (i + step);  // Bottom right.
+
+
+		vertices[index].position = XMFLOAT3(m_heightMap[index1].x, m_heightMap[index1].y, m_heightMap[index1].z);
+		vertices[index].color = color2;
+		indices[index] = index++;
+
+		vertices[index].position = XMFLOAT3(m_heightMap[index2].x, m_heightMap[index2].y, m_heightMap[index2].z);
+		vertices[index].color = color2;
+		indices[index] = index++;
+
+		vertices[index].position = XMFLOAT3(m_heightMap[index3].x, m_heightMap[index3].y, m_heightMap[index3].z);
+		vertices[index].color = color2;
+		indices[index] = index++;
+
+		vertices[index].position = XMFLOAT3(m_heightMap[index3].x, m_heightMap[index3].y, m_heightMap[index3].z);
+		vertices[index].color = color2;
+		indices[index] = index++;
+
+		vertices[index].position = XMFLOAT3(m_heightMap[index2].x, m_heightMap[index2].y, m_heightMap[index2].z);
+		vertices[index].color = color2;
+		indices[index] = index++;
+
+		vertices[index].position = XMFLOAT3(m_heightMap[index4].x, m_heightMap[index4].y, m_heightMap[index4].z);
+		vertices[index].color = color2;
+		indices[index] = index++;
 	}
 
 	//	Disable GPU access to the vertex buffer data.
