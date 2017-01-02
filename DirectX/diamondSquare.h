@@ -31,6 +31,7 @@ public:
 	void squareStep(int, int);
 	double normalize(int value);
 	double dRand(double dMin, double dMax);
+	void boxBlurAlgo(double** map, double radius);
 };
 
 

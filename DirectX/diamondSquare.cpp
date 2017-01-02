@@ -44,6 +44,8 @@ double ** DiamondSquare::process()
 	}
 	_on_end();
 
+	boxBlurAlgo(map, 0.8);
+
 	return map;
 }
 
@@ -107,4 +109,32 @@ double DiamondSquare::dRand(double dMin, double dMax)
 {
 	double d = (double)rand() / RAND_MAX;
 	return dMin + d * (dMax - dMin);
+}
+
+
+void DiamondSquare::boxBlurAlgo(double** map, double radius)
+{
+	//double** tmpMap;
+
+//	memcpy(tmpMap, map, sizeof(map));
+
+	for (int i = 0; i < size; i++)
+	{
+		for (int j = 0; j < size; j++)
+		{
+			int val = 0;
+
+			for (int iy = i - radius; iy < i + radius + 1; iy++)
+			{
+				for (int ix = j - radius; ix < j + radius + 1; ix++)
+				{
+					int x = std::min(size - 1, std::max(0, ix));
+					int y = std::min(size - 1, std::max(0, iy));
+					val += map[x][y];
+				}
+			}
+			map[i][j] = val / ((radius + radius + 1)*(radius + radius + 1));
+		}
+
+	}
 }
