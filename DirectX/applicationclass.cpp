@@ -11,6 +11,7 @@ ApplicationClass::ApplicationClass()
 	m_Timer = 0;
 	m_Fps = 0;
 	m_ShaderManager = 0;
+	m_TextureManager = 0;
 	m_Zone = 0;
 }
 
@@ -72,6 +73,34 @@ bool ApplicationClass::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidt
 	if(!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the shader manager object.", L"Error", MB_OK);
+		return false;
+	}
+
+	// Create the texture manager object.
+	m_TextureManager = new TextureManagerClass;
+	if (!m_TextureManager)
+	{
+		return false;
+	}
+
+	// Initialize the texture manager object.
+	result = m_TextureManager->Initialize(10);
+	if (!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the texture manager object.", L"Error", MB_OK);
+		return false;
+	}
+
+	// Load textures into the texture manager.
+	result = m_TextureManager->LoadTexture(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), "../Engine/data/textures/test.tga", 0);
+	if (!result)
+	{
+		return false;
+	}
+
+	result = m_TextureManager->LoadTexture(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), "../Engine/data/textures/dirt01d.tga", 1);
+	if (!result)
+	{
 		return false;
 	}
 
@@ -143,6 +172,14 @@ void ApplicationClass::Shutdown()
 		m_Timer = 0;
 	}
 
+	// Release the texture manager object.
+	if (m_TextureManager)
+	{
+		m_TextureManager->Shutdown();
+		delete m_TextureManager;
+		m_TextureManager = 0;
+	}
+
 	// Release the shader manager object.
 	if(m_ShaderManager)
 	{
@@ -194,7 +231,10 @@ bool ApplicationClass::Frame()
 	}
 
 	// Do the zone frame processing.
-	result = m_Zone->Frame(m_Direct3D, m_Input, m_ShaderManager, m_Timer->GetTime(), m_Fps->GetFps());
+//	result = m_Zone->Frame(m_Direct3D, m_Input, m_ShaderManager, m_Timer->GetTime(), m_Fps->GetFps());
+
+	result = m_Zone->Frame(m_Direct3D, m_Input, m_ShaderManager, m_TextureManager, m_Timer->GetTime(), m_Fps->GetFps());
+
 	if (!result)
 	{
 		return false;

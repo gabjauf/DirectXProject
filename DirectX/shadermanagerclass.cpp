@@ -8,6 +8,7 @@ ShaderManagerClass::ShaderManagerClass()
 {
 	m_ColorShader = 0;
 	m_FontShader = 0;
+	m_TextureShader = 0;
 }
 
 
@@ -40,6 +41,20 @@ bool ShaderManagerClass::Initialize(ID3D11Device* device, HWND hwnd)
 		return false;
 	}
 
+	// Create the texture shader object.
+	m_TextureShader = new TextureShaderClass;
+	if (!m_TextureShader)
+	{
+		return false;
+	}
+
+	// Initialize the texture shader object.
+	result = m_TextureShader->Initialize(device, hwnd);
+	if (!result)
+	{
+		return false;
+	}
+
 	// Create the font shader object.
 	m_FontShader = new FontShaderClass;
 	if(!m_FontShader)
@@ -68,6 +83,14 @@ void ShaderManagerClass::Shutdown()
 		m_FontShader = 0;
 	}
 
+	// Release the texture shader object.
+	if (m_TextureShader)
+	{
+		m_TextureShader->Shutdown();
+		delete m_TextureShader;
+		m_TextureShader = 0;
+	}
+
 	// Release the color shader object.
 	if(m_ColorShader)
 	{
@@ -86,6 +109,11 @@ bool ShaderManagerClass::RenderColorShader(ID3D11DeviceContext* deviceContext, i
 	return m_ColorShader->Render(deviceContext, indexCount, worldMatrix, viewMatrix, projectionMatrix);
 }
 
+bool ShaderManagerClass::RenderTextureShader(ID3D11DeviceContext* deviceContext, int indexCount, XMMATRIX worldMatrix, XMMATRIX viewMatrix,
+	XMMATRIX projectionMatrix, ID3D11ShaderResourceView* texture)
+{
+	return m_TextureShader->Render(deviceContext, indexCount, worldMatrix, viewMatrix, projectionMatrix, texture);
+}
 
 bool ShaderManagerClass::RenderFontShader(ID3D11DeviceContext* deviceContext, int indexCount, XMMATRIX worldMatrix, XMMATRIX viewMatrix, 
 										  XMMATRIX projectionMatrix, ID3D11ShaderResourceView* texture, XMFLOAT4 color)

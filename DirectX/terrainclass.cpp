@@ -114,7 +114,6 @@ bool TerrainClass::LoadDiamondSquareHeightMap()
 			index = (m_terrainWidth * (m_terrainHeight - 1 - j)) + i;
 
 			m_heightMap[index].y = map[j][i] - 200; // should be 0 < x < 120
-
 		}
 	}
 	
@@ -195,36 +194,48 @@ bool TerrainClass::BuildTerrainModel()
 			m_terrainModel[index].x = m_heightMap[index1].x;
 			m_terrainModel[index].y = m_heightMap[index1].y;
 			m_terrainModel[index].z = m_heightMap[index1].z;
+			m_terrainModel[index].tu = 0.0f;
+			m_terrainModel[index].tv = 0.0f;
 			index++;
 
 			// Triangle 1 - Upper right.
 			m_terrainModel[index].x = m_heightMap[index2].x;
 			m_terrainModel[index].y = m_heightMap[index2].y;
 			m_terrainModel[index].z = m_heightMap[index2].z;
+			m_terrainModel[index].tu = 1.0f;
+			m_terrainModel[index].tv = 0.0f;
 			index++;
 
 			// Triangle 1 - Bottom left.
 			m_terrainModel[index].x = m_heightMap[index3].x;
 			m_terrainModel[index].y = m_heightMap[index3].y;
 			m_terrainModel[index].z = m_heightMap[index3].z;
+			m_terrainModel[index].tu = 0.0f;
+			m_terrainModel[index].tv = 1.0f;
 			index++;
 
 			// Triangle 2 - Bottom left.
 			m_terrainModel[index].x = m_heightMap[index3].x;
 			m_terrainModel[index].y = m_heightMap[index3].y;
 			m_terrainModel[index].z = m_heightMap[index3].z;
+			m_terrainModel[index].tu = 0.0f;
+			m_terrainModel[index].tv = 1.0f;
 			index++;
 
 			// Triangle 2 - Upper right.
 			m_terrainModel[index].x = m_heightMap[index2].x;
 			m_terrainModel[index].y = m_heightMap[index2].y;
 			m_terrainModel[index].z = m_heightMap[index2].z;
+			m_terrainModel[index].tu = 1.0f;
+			m_terrainModel[index].tv = 0.0f;
 			index++;
 
 			// Triangle 2 - Bottom right.
 			m_terrainModel[index].x = m_heightMap[index4].x;
 			m_terrainModel[index].y = m_heightMap[index4].y;
 			m_terrainModel[index].z = m_heightMap[index4].z;
+			m_terrainModel[index].tu = 1.0f;
+			m_terrainModel[index].tv = 1.0f;
 			index++;
 		}
 	}
@@ -235,12 +246,12 @@ bool TerrainClass::BuildTerrainModel()
 void TerrainClass::ShutdownTerrainModel()
 {
 	// Release the terrain model data.
-	if (m_terrainModel)
+/*	if (m_terrainModel)
 	{
 		delete[] m_terrainModel;
 		m_terrainModel = 0;
 	}
-
+	*/
 	return;
 }
 
@@ -391,6 +402,8 @@ bool TerrainClass::UpdateBuffers(ID3D11DeviceContext* deviceContext, CameraClass
 		for (int j = 0; j < m_terrainHeight; j++) {
 			int HM_index = (m_terrainWidth * j) + i;
 			vertices[HM_index].position = XMFLOAT3(m_heightMap[HM_index].x, m_heightMap[HM_index].y, m_heightMap[HM_index].z);
+			vertices[HM_index].texture = XMFLOAT2(m_terrainModel[HM_index].tu, m_terrainModel[HM_index].tv);
+
 			vertices[HM_index].color = color;
 		}
 	}

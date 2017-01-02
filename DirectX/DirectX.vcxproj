@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\Download\tmp\dx11ter03_src\source\texturemanagerclass.cpp" />
     <ClCompile Include="applicationclass.cpp" />
     <ClCompile Include="cameraclass.cpp" />
     <ClCompile Include="colorshaderclass.cpp" />
@@ -45,6 +46,7 @@
     <ClCompile Include="zoneclass.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\Download\tmp\dx11ter03_src\source\texturemanagerclass.h" />
     <ClInclude Include="applicationclass.h" />
     <ClInclude Include="cameraclass.h" />
     <ClInclude Include="colorshaderclass.h" />
