@@ -150,3 +150,10 @@ bool ShaderManagerClass::RenderLightShader(ID3D11DeviceContext* deviceContext, i
 {
 	return m_LightShader->Render(deviceContext, indexCount, worldMatrix, viewMatrix, projectionMatrix, texture, lightDirection, diffuseColor);
 }
+
+bool ShaderManagerClass::RenderLightShader(ID3D11DeviceContext* deviceContext, int indexCount, XMMATRIX worldMatrix, XMMATRIX viewMatrix,
+	XMMATRIX projectionMatrix, ID3D11ShaderResourceView* texture, XMFLOAT3 lightDirection,
+	XMFLOAT4 diffuseColor, XMFLOAT4 ambientColor)
+{
+	return m_LightShader->Render(deviceContext, indexCount, worldMatrix, viewMatrix, projectionMatrix, texture, lightDirection, diffuseColor, ambientColor);
+}

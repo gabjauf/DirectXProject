@@ -424,8 +424,6 @@ bool TerrainClass::UpdateBuffers(ID3D11DeviceContext* deviceContext, CameraClass
 	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
 	D3D11_MAPPED_SUBRESOURCE vertexData, indexData;
 	XMFLOAT4 color;
-	XMFLOAT4 color2;
-
 
 	// Set the color of the terrain grid.
 	color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -458,7 +456,6 @@ bool TerrainClass::UpdateBuffers(ID3D11DeviceContext* deviceContext, CameraClass
 			int HM_index = (m_terrainWidth * j) + i;
 			vertices[HM_index].position = XMFLOAT3(m_heightMap[HM_index].x, m_heightMap[HM_index].y, m_heightMap[HM_index].z);
 			vertices[HM_index].texture = XMFLOAT2(m_terrainModel[HM_index].tu, m_terrainModel[HM_index].tv);
-			//vertices[HM_index].color = color;
 			vertices[HM_index].normal = XMFLOAT3(m_terrainModel[HM_index].nx, m_terrainModel[HM_index].ny, m_terrainModel[i].nz);
 		}
 	}
