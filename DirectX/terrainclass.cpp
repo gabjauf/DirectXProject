@@ -404,7 +404,7 @@ bool TerrainClass::UpdateBuffers(ID3D11DeviceContext* deviceContext, CameraClass
 			vertices[HM_index].position = XMFLOAT3(m_heightMap[HM_index].x, m_heightMap[HM_index].y, m_heightMap[HM_index].z);
 			vertices[HM_index].texture = XMFLOAT2(m_terrainModel[HM_index].tu, m_terrainModel[HM_index].tv);
 
-			vertices[HM_index].color = color;
+			//vertices[HM_index].color = color;
 		}
 	}
 

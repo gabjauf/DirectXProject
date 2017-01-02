@@ -112,8 +112,8 @@
     <ClCompile Include="diamondSquare.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Download\tmp\dx11ter03_src\source\texturemanagerclass.cpp">
-      <Filter>Sources\Elements</Filter>
+    <ClCompile Include="texturemanagerclass.cpp">
+      <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -186,8 +186,8 @@
     <ClInclude Include="diamondSquare.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Download\tmp\dx11ter03_src\source\texturemanagerclass.h">
-      <Filter>Fichiers d%27en-tête\Elements</Filter>
+    <ClInclude Include="texturemanagerclass.h">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
