@@ -17,6 +17,7 @@
 #include "cameraclass.h"
 #include "positionclass.h"
 #include "terrainclass.h"
+#include "lightclass.h"
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -45,6 +46,7 @@ private:
 	PositionClass* m_Position;
 	TerrainClass* m_Terrain;
 	bool m_displayUI, m_wireFrame;
+	LightClass* m_Light;
 };
 
 #endif
