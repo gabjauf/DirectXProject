@@ -253,74 +253,6 @@ bool TerrainClass::InitializeBuffers(ID3D11Device* device)
 	HRESULT result;
 	XMFLOAT4 color;
 
-	/*
-	// Set the color of the terrain grid.
-	color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-
-	// Calculate the number of vertices in the terrain.
-	m_vertexCount = (m_terrainWidth - 1) * (m_terrainHeight - 1) * 6;
-
-	// Set the index count to the same as the vertex count.
-	m_indexCount = m_vertexCount;
-
-	// Create the vertex array.
-	vertices = new VertexType[m_vertexCount];
-	if (!vertices)
-	{
-		return false;
-	}
-
-	// Create the index array.
-	indices = new unsigned long[m_indexCount];
-	if (!indices)
-	{
-		return false;
-	}
-
-	int LOD = 50;
-	int index = 0;
-	// Load the vertex array and index array with 3D terrain model data.
-	for (int i = 0; i < m_terrainWidth - 1 - i / LOD; i += i / LOD + 1)
-	{
-		for (int j = 0; j < m_terrainHeight - j / LOD - 1; j += j / LOD + 1)
-		{
-			int iLod = (i % LOD) * (i + 1);
-			int jLod = (j % LOD) * (j + 1);
-			// Get the indexes to the four points of the quad.
-			int index1 = (m_terrainWidth * j) + i;          // Upper left.
-			int index2 = (m_terrainWidth * j) + (i + i / LOD + 1);      // Upper right.
-			int index3 = (m_terrainWidth * (j + j / LOD + 1)) + i;      // Bottom left.
-			int index4 = (m_terrainWidth * (j + j / LOD + 1)) + (i + i / LOD + 1);  // Bottom right.
-
-															// Now create two triangles for that quad.
-															// Triangle 1 - Upper left.
-			vertices[index].position = XMFLOAT3(m_heightMap[index1].x, m_heightMap[index1].y, m_heightMap[index1].z);
-			vertices[index].color = color;
-			indices[index] = index++;
-
-			vertices[index].position = XMFLOAT3(m_heightMap[index2].x, m_heightMap[index2].y, m_heightMap[index2].z);
-			vertices[index].color = color;
-			indices[index] = index++;
-
-			vertices[index].position = XMFLOAT3(m_heightMap[index3].x, m_heightMap[index3].y, m_heightMap[index3].z);
-			vertices[index].color = color;
-			indices[index] = index++;
-
-			vertices[index].position = XMFLOAT3(m_heightMap[index3].x, m_heightMap[index3].y, m_heightMap[index3].z);
-			vertices[index].color = color;
-			indices[index] = index++;
-
-			vertices[index].position = XMFLOAT3(m_heightMap[index2].x, m_heightMap[index2].y, m_heightMap[index2].z);
-			vertices[index].color = color;
-			indices[index] = index++;
-
-			vertices[index].position = XMFLOAT3(m_heightMap[index4].x, m_heightMap[index4].y, m_heightMap[index4].z);
-			vertices[index].color = color;
-			indices[index] = index++;
-		}
-	}
-	*/
-
 	// Set up the description of the static vertex buffer.
 	vertexBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 	vertexBufferDesc.ByteWidth = sizeof(VertexType) * m_vertexCount;
@@ -463,7 +395,7 @@ bool TerrainClass::UpdateBuffers(ID3D11DeviceContext* deviceContext, CameraClass
 		}
 	}
 
-	int LOD = 100;
+	int LOD = 50;
 	int index = 0;
 	int step = 2;
 	// Load the vertex array and index array with 3D terrain model data.
@@ -497,20 +429,66 @@ bool TerrainClass::UpdateBuffers(ID3D11DeviceContext* deviceContext, CameraClass
 
 
 			*/
+
+			/*
+			
+			D ---- G ---- C
+			| \  6 | \  8 |
+			|  5 \ |  7 \ |
+			H ---- I ---- F
+			| \  2 | \  4 |
+			| 1  \ |  3 \ |
+			A ---- E ---- B
+
+			*/
+
+			step = static_cast<int>(pow(2, i / LOD + 1));
 			
 			// Get the indexes to the four points of the quad.
-			int index1 = (m_terrainWidth * j) + i;          // Upper left.
-			int index2 = (m_terrainWidth * j) + (i + step);      // Upper right.
-			int index3 = (m_terrainWidth * (j + step)) + i;      // Bottom left.
-			int index4 = (m_terrainWidth * (j + step)) + (i + step);  // Bottom right.
+			int A = (m_terrainWidth * j) + i;
+			int B = (m_terrainWidth * j) + (i + step);
+			int D = (m_terrainWidth * (j + step)) + i;
+			int C = (m_terrainWidth * (j + step)) + (i + step);
 
-			indices[index++] = index1;
-			indices[index++] = index2;
-			indices[index++] = index3;
+			int E = (A + B) / 2;
+			int F = (B + C) / 2;
+			int G = (C + D) / 2;
+			int H = (A + D) / 2;
 
-			indices[index++] = index3;
-			indices[index++] = index2;
-			indices[index++] = index4;
+			int I = (m_terrainWidth * (j + step / 2)) + (i + step / 2);
+
+			// Triangle 1
+			indices[index++] = A;
+			indices[index++] = E;
+			indices[index++] = H;
+			// Triangle 2
+			indices[index++] = H;
+			indices[index++] = E;
+			indices[index++] = I;
+			// Triangle 3
+			indices[index++] = E;
+			indices[index++] = B;
+			indices[index++] = I;
+			// Triangle 4
+			indices[index++] = I;
+			indices[index++] = B;
+			indices[index++] = F;
+			// Triangle 5
+			indices[index++] = H;
+			indices[index++] = I;
+			indices[index++] = D;
+			// Triangle 6
+			indices[index++] = D;
+			indices[index++] = I;
+			indices[index++] = G;
+			// Triangle 7
+			indices[index++] = I;
+			indices[index++] = F;
+			indices[index++] = G;
+			// Triangle 8
+			indices[index++] = G;
+			indices[index++] = F;
+			indices[index++] = C;
 
 			/*
 			|
@@ -526,34 +504,99 @@ bool TerrainClass::UpdateBuffers(ID3D11DeviceContext* deviceContext, CameraClass
 				   Draw column
 			*/
 
-			index1 = (m_terrainWidth * i) + j;          // Upper left.
-			index2 = (m_terrainWidth * i) + (j + step);      // Upper right.
-			index3 = (m_terrainWidth * (i + step)) + j;      // Bottom left.
-			index4 = (m_terrainWidth * (i + step)) + (j + step);  // Bottom right.
+			// Get the indexes to the four points of the quad.
+			A = (m_terrainWidth * i) + j; 
+			B = (m_terrainWidth * i) + (j + step);
+			D = (m_terrainWidth * (i + step)) + j; 
+			C = (m_terrainWidth * (i + step)) + (j + step);  
 
-			indices[index++] = index1;
-			indices[index++] = index2;
-			indices[index++] = index3;
+			E = (A + B) / 2;
+			F = (B + C) / 2;
+			G = (C + D) / 2;
+			H = (A + D) / 2;
 
-			indices[index++] = index3;
-			indices[index++] = index2;
-			indices[index++] = index4;
+			I = (m_terrainWidth * (i + step / 2)) + (j + step / 2);
+
+			// Triangle 1
+			indices[index++] = A;
+			indices[index++] = E;
+			indices[index++] = H;
+			// Triangle 2
+			indices[index++] = H;
+			indices[index++] = E;
+			indices[index++] = I;
+			// Triangle 3
+			indices[index++] = E;
+			indices[index++] = B;
+			indices[index++] = I;
+			// Triangle 4
+			indices[index++] = I;
+			indices[index++] = B;
+			indices[index++] = F;
+			// Triangle 5
+			indices[index++] = H;
+			indices[index++] = I;
+			indices[index++] = D;
+			// Triangle 6
+			indices[index++] = D;
+			indices[index++] = I;
+			indices[index++] = G;
+			// Triangle 7
+			indices[index++] = I;
+			indices[index++] = F;
+			indices[index++] = G;
+			// Triangle 8
+			indices[index++] = G;
+			indices[index++] = F;
+			indices[index++] = C;
 
 		}
-		int index1 = (m_terrainWidth * i) + i;          // Upper left.
-		int index2 = (m_terrainWidth * i) + (i + step);      // Upper right.
-		int index3 = (m_terrainWidth * (i + step)) + i;      // Bottom left.
-		int index4 = (m_terrainWidth * (i + step)) + (i + step);  // Bottom right.
 
-		indices[index++] = index1;
-		indices[index++] = index2;
-		indices[index++] = index3;
+		int A = (m_terrainWidth * i) + i;
+		int B = (m_terrainWidth * i) + (i + step);
+		int D = (m_terrainWidth * (i + step)) + i;
+		int C = (m_terrainWidth * (i + step)) + (i + step);
 
-		indices[index++] = index3;
-		indices[index++] = index2;
-		indices[index++] = index4;
+		int E = (A + B) / 2;
+		int F = (B + C) / 2;
+		int G = (C + D) / 2;
+		int H = (A + D) / 2;
 
-		step = static_cast<int>(pow(2, i / LOD + 1));
+		int I = (m_terrainWidth * (i + step / 2)) + (i + step / 2);
+
+		// Triangle 1
+		indices[index++] = A;
+		indices[index++] = E;
+		indices[index++] = H;
+		// Triangle 2
+		indices[index++] = H;
+		indices[index++] = E;
+		indices[index++] = I;
+		// Triangle 3
+		indices[index++] = E;
+		indices[index++] = B;
+		indices[index++] = I;
+		// Triangle 4
+		indices[index++] = I;
+		indices[index++] = B;
+		indices[index++] = F;
+		// Triangle 5
+		indices[index++] = H;
+		indices[index++] = I;
+		indices[index++] = D;
+		// Triangle 6
+		indices[index++] = D;
+		indices[index++] = I;
+		indices[index++] = G;
+		// Triangle 7
+		indices[index++] = I;
+		indices[index++] = F;
+		indices[index++] = G;
+		// Triangle 8
+		indices[index++] = G;
+		indices[index++] = F;
+		indices[index++] = C;
+
 	}
 
 	//	Disable GPU access to the vertex buffer data.
