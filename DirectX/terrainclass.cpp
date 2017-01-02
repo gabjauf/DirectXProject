@@ -489,7 +489,7 @@ bool TerrainClass::UpdateBuffers(ID3D11DeviceContext* deviceContext, CameraClass
 
 
 			*/
-			//step = max(i / LOD, j / LOD) *  2 + 2;
+			
 			// Get the indexes to the four points of the quad.
 			int index1 = (m_terrainWidth * j) + i;          // Upper left.
 			int index2 = (m_terrainWidth * j) + (i + step);      // Upper right.
@@ -595,6 +595,8 @@ bool TerrainClass::UpdateBuffers(ID3D11DeviceContext* deviceContext, CameraClass
 		vertices[index].position = XMFLOAT3(m_heightMap[index4].x, m_heightMap[index4].y, m_heightMap[index4].z);
 		vertices[index].color = color2;
 		indices[index] = index++;
+
+		step = static_cast<int>(pow(2, i / LOD + 1));
 	}
 
 	//	Disable GPU access to the vertex buffer data.
