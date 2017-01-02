@@ -29,18 +29,26 @@ private:
 	{
 		XMFLOAT3 position;
 		XMFLOAT4 color;
+		XMFLOAT3 normal;
 		XMFLOAT2 texture;
 	};
 
 	struct HeightMapType
 	{
 		float x, y, z;
+		float nx, ny, nz;
 	};
 
 	struct ModelType
 	{
 		float x, y, z;
 		float tu, tv;
+		float nx, ny, nz;
+	};
+
+	struct VectorType
+	{
+		float x, y, z;
 	};
 
 public:
@@ -52,6 +60,7 @@ public:
 
 	void Shutdown();
 	bool Render(ID3D11DeviceContext*, CameraClass*);
+	bool Render(ID3D11DeviceContext* deviceContext);
 
 	int GetIndexCount();
 
@@ -59,12 +68,14 @@ private:
 //	bool LoadSetupFile(char*);
 	void ShutdownHeightMap();
 	void SetTerrainCoordinates();
+	bool CalculateNormals();
 	bool BuildTerrainModel();
 	void ShutdownTerrainModel();
 
 	bool InitializeBuffers(ID3D11Device*);
 	void ShutdownBuffers();
 	void RenderBuffers(ID3D11DeviceContext*, CameraClass*);
+	void RenderBuffers(ID3D11DeviceContext* deviceContext);
 	bool UpdateBuffers(ID3D11DeviceContext*, CameraClass*);
 
 	bool LoadDiamondSquareHeightMap();
