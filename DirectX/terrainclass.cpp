@@ -365,10 +365,10 @@ bool TerrainClass::UpdateBuffers(ID3D11DeviceContext* deviceContext, CameraClass
 	color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 
 	// Calculate the number of vertices in the terrain.
-	m_vertexCount = (m_terrainWidth - 1) * (m_terrainHeight - 1) * 6;
+	m_vertexCount = m_terrainWidth * m_terrainHeight;
 
 	// Set the index count to the same as the vertex count.
-	m_indexCount = m_vertexCount;
+	m_indexCount = m_vertexCount * 2;
 
 	// Create the vertex array.
 	vertices = new VertexType[m_vertexCount];
