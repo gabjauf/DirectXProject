@@ -395,9 +395,10 @@ bool TerrainClass::UpdateBuffers(ID3D11DeviceContext* deviceContext, CameraClass
 		}
 	}
 
-	int LOD = 50;
+	int LOD = 100;
 	int index = 0;
 	int step = 2;
+	int tmpStep;
 	// Load the vertex array and index array with 3D terrain model data.
 	for (int i = 0; i < m_terrainWidth - step; i += step)
 	{
@@ -414,48 +415,156 @@ bool TerrainClass::UpdateBuffers(ID3D11DeviceContext* deviceContext, CameraClass
 			
 			
 		*/
-		
-		for (int j = 0; j < i; j += step)
-		{
-			/*
-			|
-			o_ o_ o_ o
-		    |		 | <- draw this line
-			o_ o_ o  o
-			|	  |  |
-			o_ o  o  o
-			|  |  |  |
-			o_ o_ o_ o_ o_
+		step = static_cast<int>(pow(2, i / LOD + 1));
+
+		tmpStep = static_cast<int>(pow(2, (i + step) / LOD + 1));
+
+		if (step == tmpStep) {
+
+			for (int j = 0; j < i; j += step)
+			{
 
 
-			*/
+				/*
+				|
+				o_ o_ o_ o
+				|		 | <- draw this line
+				o_ o_ o  o
+				|	  |  |
+				o_ o  o  o
+				|  |  |  |
+				o_ o_ o_ o_ o_
 
-			/*
-			
-			D ---- G ---- C
-			| \  6 | \  8 |
-			|  5 \ |  7 \ |
-			H ---- I ---- F
-			| \  2 | \  4 |
-			| 1  \ |  3 \ |
-			A ---- E ---- B
+				No need to distinguish the different case, we draw all the triangle the same way:
 
-			*/
+				D ---- G ---- C
+				| \  6 | \  8 |
+				|  5 \ |  7 \ |
+				H ---- I ---- F
+				| \  2 | \  4 |
+				| 1  \ |  3 \ |
+				A ---- E ---- B
 
-			step = static_cast<int>(pow(2, i / LOD + 1));
-			
-			// Get the indexes to the four points of the quad.
-			int A = (m_terrainWidth * j) + i;
-			int B = (m_terrainWidth * j) + (i + step);
-			int D = (m_terrainWidth * (j + step)) + i;
-			int C = (m_terrainWidth * (j + step)) + (i + step);
+				*/
+
+				// Get the indexes to the four points of the quad.
+				int A = (m_terrainWidth * j) + i;
+				int B = (m_terrainWidth * j) + (i + step);
+				int D = (m_terrainWidth * (j + step)) + i;
+				int C = (m_terrainWidth * (j + step)) + (i + step);
+
+				int E = (A + B) / 2;
+				int F = (B + C) / 2;
+				int G = (C + D) / 2;
+				int H = (A + D) / 2;
+
+				int I = (m_terrainWidth * (j + step / 2)) + (i + step / 2);
+
+				// Triangle 1
+				indices[index++] = A;
+				indices[index++] = E;
+				indices[index++] = H;
+				// Triangle 2
+				indices[index++] = H;
+				indices[index++] = E;
+				indices[index++] = I;
+				// Triangle 3
+				indices[index++] = E;
+				indices[index++] = B;
+				indices[index++] = I;
+				// Triangle 4
+				indices[index++] = I;
+				indices[index++] = B;
+				indices[index++] = F;
+				// Triangle 5
+				indices[index++] = H;
+				indices[index++] = I;
+				indices[index++] = D;
+				// Triangle 6
+				indices[index++] = D;
+				indices[index++] = I;
+				indices[index++] = G;
+				// Triangle 7
+				indices[index++] = I;
+				indices[index++] = F;
+				indices[index++] = G;
+				// Triangle 8
+				indices[index++] = G;
+				indices[index++] = F;
+				indices[index++] = C;
+
+				/*
+				|
+				o_ o_ o_ o
+				|		 |
+				o_ o_ o  o
+				|	  |  |
+				o_ o  o  o
+				|\ |  |  |
+				o_\o_ o_ o_ o_
+				^
+				|
+				Draw column
+				*/
+
+				// Get the indexes to the four points of the quad.
+				A = (m_terrainWidth * i) + j;
+				B = (m_terrainWidth * i) + (j + step);
+				D = (m_terrainWidth * (i + step)) + j;
+				C = (m_terrainWidth * (i + step)) + (j + step);
+
+				E = (A + B) / 2;
+				F = (B + C) / 2;
+				G = (C + D) / 2;
+				H = (A + D) / 2;
+
+				I = (m_terrainWidth * (i + step / 2)) + (j + step / 2);
+
+				// Triangle 1
+				indices[index++] = A;
+				indices[index++] = E;
+				indices[index++] = H;
+				// Triangle 2
+				indices[index++] = H;
+				indices[index++] = E;
+				indices[index++] = I;
+				// Triangle 3
+				indices[index++] = E;
+				indices[index++] = B;
+				indices[index++] = I;
+				// Triangle 4
+				indices[index++] = I;
+				indices[index++] = B;
+				indices[index++] = F;
+				// Triangle 5
+				indices[index++] = H;
+				indices[index++] = I;
+				indices[index++] = D;
+				// Triangle 6
+				indices[index++] = D;
+				indices[index++] = I;
+				indices[index++] = G;
+				// Triangle 7
+				indices[index++] = I;
+				indices[index++] = F;
+				indices[index++] = G;
+				// Triangle 8
+				indices[index++] = G;
+				indices[index++] = F;
+				indices[index++] = C;
+			}
+
+			int A = (m_terrainWidth * i) + i;
+			int B = (m_terrainWidth * i) + (i + step);
+			int D = (m_terrainWidth * (i + step)) + i;
+			int C = (m_terrainWidth * (i + step)) + (i + step);
 
 			int E = (A + B) / 2;
 			int F = (B + C) / 2;
 			int G = (C + D) / 2;
 			int H = (A + D) / 2;
 
-			int I = (m_terrainWidth * (j + step / 2)) + (i + step / 2);
+			int I = (m_terrainWidth * (i + step / 2)) + (i + step / 2);
 
 			// Triangle 1
 			indices[index++] = A;
@@ -489,33 +598,157 @@ bool TerrainClass::UpdateBuffers(ID3D11DeviceContext* deviceContext, CameraClass
 			indices[index++] = G;
 			indices[index++] = F;
 			indices[index++] = C;
+		}
+		else {
 
+			for (int j = 0; j < i; j += step)
+			{
+				/*
+				|
+				o_ o_ o_ o
+				|		 | <- draw this line
+				o_ o_ o  o
+				|	  |  |
+				o_ o  o  o
+				|  |  |  |
+				o_ o_ o_ o_ o_
+
+				D ----------- C
+				| \    7    / |
+				|  5 \   /  6 |
+				H ---- I ---- F
+				| \  2 | \  4 |
+				| 1  \ |  3 \ |
+				A ---- E ---- B
+
+				*/
+
+				// Get the indexes to the four points of the quad.
+				int A = (m_terrainWidth * i) + j;
+				int B = (m_terrainWidth * i) + (j + step);
+				int D = (m_terrainWidth * (i + step)) + j;
+				int C = (m_terrainWidth * (i + step)) + (j + step);
+
+				int E = (A + B) / 2;
+				int F = (B + C) / 2;
+				int H = (A + D) / 2;
+
+				int I = (m_terrainWidth * (i + step / 2)) + (j + step / 2);
+
+				// Triangle 1
+				indices[index++] = A;
+				indices[index++] = E;
+				indices[index++] = H;
+				// Triangle 2
+				indices[index++] = H;
+				indices[index++] = E;
+				indices[index++] = I;
+				// Triangle 3
+				indices[index++] = E;
+				indices[index++] = B;
+				indices[index++] = I;
+				// Triangle 4
+				indices[index++] = I;
+				indices[index++] = B;
+				indices[index++] = F;
+				// Triangle 5
+				indices[index++] = H;
+				indices[index++] = I;
+				indices[index++] = D;
+				// Triangle 6
+				indices[index++] = I;
+				indices[index++] = F;
+				indices[index++] = C;
+				// Triangle 7
+				indices[index++] = D;
+				indices[index++] = I;
+				indices[index++] = C;
+
+				/*
+				|
+				o_ o_ o_ o
+				|		 |
+				o_ o_ o  o
+				|	  |  |
+				o_ o  o  o
+				|\ |  |  |
+				o_\o_ o_ o_ o_
+				^
+				|
+				Draw column
+
+				D ---- G ---- C
+				| \  6 |  4 / |
+				|  5 \ | /    |
+				H ---- I    7 |
+				| \  2 | \    |
+				| 1  \ |  3 \ |
+				A ---- E ---- B
+
+				*/
+
+				// Get the indexes to the four points of the quad.
+				A = (m_terrainWidth * j) + i;
+				B = (m_terrainWidth * j) + (i + step);
+				D = (m_terrainWidth * (j + step)) + i;
+				C = (m_terrainWidth * (j + step)) + (i + step);
+
+				E = (A + B) / 2;
+				int G = (C + D) / 2;
+				H = (A + D) / 2;
+
+				I = (m_terrainWidth * (j + step / 2)) + (i + step / 2);
+
+				// Triangle 1
+				indices[index++] = A;
+				indices[index++] = E;
+				indices[index++] = H;
+				// Triangle 2
+				indices[index++] = H;
+				indices[index++] = E;
+				indices[index++] = I;
+				// Triangle 3
+				indices[index++] = E;
+				indices[index++] = B;
+				indices[index++] = I;
+				// Triangle 4
+				indices[index++] = I;
+				indices[index++] = C;
+				indices[index++] = G;
+				// Triangle 5
+				indices[index++] = H;
+				indices[index++] = I;
+				indices[index++] = D;
+				// Triangle 6
+				indices[index++] = D;
+				indices[index++] = I;
+				indices[index++] = G;
+				// Triangle 7
+				indices[index++] = I;
+				indices[index++] = B;
+				indices[index++] = C;
+
+			}
 			/*
-			|
-			o_ o_ o_ o
-			|		 |
-			o_ o_ o  o
-			|	  |  |
-			o_ o  o  o
-			|\ |  |  |
-			o_\o_ o_ o_ o_
-			       ^
-				   |
-				   Draw column
+			D ----------- C
+			| \    5    / |
+			|  4 \   /    |
+			H ---- I    6 |
+			| \  2 | \    |
+			| 1  \ |  3 \ |
+			A ---- E ---- B
+
 			*/
 
-			// Get the indexes to the four points of the quad.
-			A = (m_terrainWidth * i) + j; 
-			B = (m_terrainWidth * i) + (j + step);
-			D = (m_terrainWidth * (i + step)) + j; 
-			C = (m_terrainWidth * (i + step)) + (j + step);  
+			int A = (m_terrainWidth * i) + i;
+			int B = (m_terrainWidth * i) + (i + step);
+			int D = (m_terrainWidth * (i + step)) + i;
+			int C = (m_terrainWidth * (i + step)) + (i + step);
 
-			E = (A + B) / 2;
-			F = (B + C) / 2;
-			G = (C + D) / 2;
-			H = (A + D) / 2;
+			int E = (A + B) / 2;
+			int H = (A + D) / 2;
 
-			I = (m_terrainWidth * (i + step / 2)) + (j + step / 2);
+			int I = (m_terrainWidth * (i + step / 2)) + (i + step / 2);
 
 			// Triangle 1
 			indices[index++] = A;
@@ -530,72 +763,18 @@ bool TerrainClass::UpdateBuffers(ID3D11DeviceContext* deviceContext, CameraClass
 			indices[index++] = B;
 			indices[index++] = I;
 			// Triangle 4
-			indices[index++] = I;
-			indices[index++] = B;
-			indices[index++] = F;
-			// Triangle 5
 			indices[index++] = H;
 			indices[index++] = I;
 			indices[index++] = D;
-			// Triangle 6
+			// Triangle 5
 			indices[index++] = D;
 			indices[index++] = I;
-			indices[index++] = G;
-			// Triangle 7
-			indices[index++] = I;
-			indices[index++] = F;
-			indices[index++] = G;
-			// Triangle 8
-			indices[index++] = G;
-			indices[index++] = F;
 			indices[index++] = C;
-
+			// Triangle 6
+			indices[index++] = I;
+			indices[index++] = B;
+			indices[index++] = C;
 		}
-
-		int A = (m_terrainWidth * i) + i;
-		int B = (m_terrainWidth * i) + (i + step);
-		int D = (m_terrainWidth * (i + step)) + i;
-		int C = (m_terrainWidth * (i + step)) + (i + step);
-
-		int E = (A + B) / 2;
-		int F = (B + C) / 2;
-		int G = (C + D) / 2;
-		int H = (A + D) / 2;
-
-		int I = (m_terrainWidth * (i + step / 2)) + (i + step / 2);
-
-		// Triangle 1
-		indices[index++] = A;
-		indices[index++] = E;
-		indices[index++] = H;
-		// Triangle 2
-		indices[index++] = H;
-		indices[index++] = E;
-		indices[index++] = I;
-		// Triangle 3
-		indices[index++] = E;
-		indices[index++] = B;
-		indices[index++] = I;
-		// Triangle 4
-		indices[index++] = I;
-		indices[index++] = B;
-		indices[index++] = F;
-		// Triangle 5
-		indices[index++] = H;
-		indices[index++] = I;
-		indices[index++] = D;
-		// Triangle 6
-		indices[index++] = D;
-		indices[index++] = I;
-		indices[index++] = G;
-		// Triangle 7
-		indices[index++] = I;
-		indices[index++] = F;
-		indices[index++] = G;
-		// Triangle 8
-		indices[index++] = G;
-		indices[index++] = F;
-		indices[index++] = C;
 
 	}
 
