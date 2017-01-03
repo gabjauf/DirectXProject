@@ -65,9 +65,6 @@
     <None Include="shader\texture.ps" />
     <None Include="shader\texture.vs" />
   </ItemGroup>
-  <ItemGroup>
-    <Image Include="texture\stone01.tga" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B7E44EFE-1F51-487D-9A3D-0AFEBA502CAE}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

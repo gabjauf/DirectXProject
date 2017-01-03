@@ -13,9 +13,6 @@
       <UniqueIdentifier>{aa381ec5-9529-48fc-987c-ee9eb1b4e398}</UniqueIdentifier>
       <Extensions>hlsl;ps;vs</Extensions>
     </Filter>
-    <Filter Include="textures">
-      <UniqueIdentifier>{a237530a-0745-4d30-9547-a758bf37965e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Fichiers de ressources">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -161,10 +158,5 @@
     <None Include="shader\color.vs">
       <Filter>Shaders</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="texture\stone01.tga">
-      <Filter>textures</Filter>
-    </Image>
   </ItemGroup>
 </Project>
