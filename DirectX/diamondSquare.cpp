@@ -3,7 +3,6 @@
 
 DiamondSquare::DiamondSquare(int s, int r, int min, int max)
 {
-	//not used for now, seems ok
 	min_val = min;
 	max_val = max;
 
@@ -22,7 +21,6 @@ DiamondSquare::DiamondSquare(int s, int r, int min, int max)
 
 DiamondSquare::~DiamondSquare()
 {
-	//@TODO delete map
 	for (int i = 0; i < size; i++)
 	{
 		delete map[i];
@@ -34,7 +32,6 @@ double ** DiamondSquare::process()
 {
 	_on_start();
 
-	//Processing...
 	for (int sideLength = size - 1; sideLength >= 2; sideLength /= 2, range /= 2)
 	{
 		int halfSide = sideLength / 2;
@@ -42,7 +39,6 @@ double ** DiamondSquare::process()
 		squareStep(sideLength, halfSide);
 		diamondStep(sideLength, halfSide);
 	}
-	_on_end();
 
 	boxBlurAlgo(map, 0.8);
 
@@ -90,7 +86,7 @@ void DiamondSquare::squareStep(int sideLength, int halfSide)
 
 double DiamondSquare::normalize(int value) {
 	return round(std::max(std::min(value, 255), 0));
-} // normalize
+} 
 
 void DiamondSquare::_on_start()
 {
@@ -98,11 +94,6 @@ void DiamondSquare::_on_start()
 	map[0][0] = map[0][size - 1] = map[size - 1][0] = map[size - 1][size - 1] = 100;
 	// Initializing srand for random values :
 	srand(time(NULL));
-}
-
-void DiamondSquare::_on_end()
-{
-
 }
 
 double DiamondSquare::dRand(double dMin, double dMax)
@@ -114,10 +105,6 @@ double DiamondSquare::dRand(double dMin, double dMax)
 
 void DiamondSquare::boxBlurAlgo(double** map, double radius)
 {
-	//double** tmpMap;
-
-//	memcpy(tmpMap, map, sizeof(map));
-
 	for (int i = 0; i < size; i++)
 	{
 		for (int j = 0; j < size; j++)
@@ -135,6 +122,5 @@ void DiamondSquare::boxBlurAlgo(double** map, double radius)
 			}
 			map[i][j] = val / ((radius + radius + 1)*(radius + radius + 1));
 		}
-
 	}
 }

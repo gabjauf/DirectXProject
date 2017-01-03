@@ -294,6 +294,7 @@ bool ZoneClass::Render(D3DClass* Direct3D, ShaderManagerClass* ShaderManager)
 	m_Terrain->Render(Direct3D->GetDeviceContext(), m_Camera);
 	result = ShaderManager->RenderColorShader(Direct3D->GetDeviceContext(), m_Terrain->GetIndexCount(), worldMatrix, viewMatrix, 
 											  projectionMatrix);
+	
 	if(!result)
 	{
 		return false;
@@ -351,7 +352,7 @@ bool ZoneClass::Render(D3DClass* Direct3D, ShaderManagerClass* ShaderManager, Te
 	
 	result = ShaderManager->RenderLightShader(Direct3D->GetDeviceContext(), m_Terrain->GetIndexCount(), worldMatrix, viewMatrix,
 		projectionMatrix, TextureManager->GetTexture(1), m_Light->GetDirection(),
-		m_Light->GetDiffuseColor(), m_Light->GetDiffuseColor()); // ->GetAmbientColor());
+		m_Light->GetDiffuseColor()); // ->GetAmbientColor());
 
 	if (!result)
 	{
