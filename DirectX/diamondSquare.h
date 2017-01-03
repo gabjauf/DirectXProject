@@ -26,7 +26,6 @@ public:
 
 	double** process();
 	void _on_start();
-	void _on_end();
 	void diamondStep(int, int);
 	void squareStep(int, int);
 	double normalize(int value);
