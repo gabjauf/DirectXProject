@@ -7,9 +7,8 @@
 ApplicationClass::ApplicationClass()
 {
 	m_Input = 0;
-	m_Direct3D = 0;
 	m_Timer = 0;
-	m_Fps = 0;
+	m_Direct3D = 0;
 	m_ShaderManager = 0;
 	m_TextureManager = 0;
 	m_Zone = 0;
@@ -106,28 +105,19 @@ bool ApplicationClass::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidt
 
 	// Create the timer object.
 	m_Timer = new TimerClass;
-	if(!m_Timer)
+	if (!m_Timer)
 	{
 		return false;
 	}
 
 	// Initialize the timer object.
 	result = m_Timer->Initialize();
-	if(!result)
+	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the timer object.", L"Error", MB_OK);
 		return false;
 	}
 
-	// Create the fps object.
-	m_Fps = new FpsClass;
-	if(!m_Fps)
-	{
-		return false;
-	}
-
-	// Initialize the fps object.
-	m_Fps->Initialize();
 
 	// Create the zone object.
 	m_Zone = new ZoneClass;
@@ -157,20 +147,6 @@ void ApplicationClass::Shutdown()
 		delete m_Zone;
 		m_Zone = 0;
 	}
-	
-	// Release the fps object.
-	if(m_Fps)
-	{
-		delete m_Fps;
-		m_Fps = 0;
-	}
-
-	// Release the timer object.
-	if(m_Timer)
-	{
-		delete m_Timer;
-		m_Timer = 0;
-	}
 
 	// Release the texture manager object.
 	if (m_TextureManager)
@@ -186,6 +162,13 @@ void ApplicationClass::Shutdown()
 		m_ShaderManager->Shutdown();
 		delete m_ShaderManager;
 		m_ShaderManager = 0;
+	}
+
+	// Release the timer object.
+	if (m_Timer)
+	{
+		delete m_Timer;
+		m_Timer = 0;
 	}
 
 	// Release the Direct3D object.
@@ -212,10 +195,14 @@ bool ApplicationClass::Frame()
 {
 	bool result;
 
-
-	// Update the system stats.
-	m_Fps->Frame();
 	m_Timer->Frame();
+
+	// Do the input frame processing.
+	result = m_Input->Frame();
+	if (!result)
+	{
+		return false;
+	}
 
 	// Do the input frame processing.
 	result = m_Input->Frame();
@@ -231,9 +218,8 @@ bool ApplicationClass::Frame()
 	}
 
 	// Do the zone frame processing.
-//	result = m_Zone->Frame(m_Direct3D, m_Input, m_ShaderManager, m_Timer->GetTime(), m_Fps->GetFps());
 
-	result = m_Zone->Frame(m_Direct3D, m_Input, m_ShaderManager, m_TextureManager, m_Timer->GetTime(), m_Fps->GetFps());
+	result = m_Zone->Frame(m_Direct3D, m_Input, m_ShaderManager, m_TextureManager, m_Timer->GetTime());
 
 	if (!result)
 	{

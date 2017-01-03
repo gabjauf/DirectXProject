@@ -12,8 +12,6 @@
 #include "inputclass.h"
 #include "shadermanagerclass.h"
 #include "texturemanagerclass.h"
-#include "timerclass.h"
-#include "userinterfaceclass.h"
 #include "cameraclass.h"
 #include "positionclass.h"
 #include "terrainclass.h"
@@ -32,20 +30,17 @@ public:
 
 	bool Initialize(D3DClass*, HWND, int, int, float);
 	void Shutdown();
-	bool Frame(D3DClass*, InputClass*, ShaderManagerClass*, float, int);
-	bool Frame(D3DClass*, InputClass*, ShaderManagerClass*, TextureManagerClass*, float, int);
+	bool Frame(D3DClass*, InputClass*, ShaderManagerClass*, TextureManagerClass*, float);
 
 private:
 	void HandleMovementInput(InputClass*, float);
-	bool Render(D3DClass*, ShaderManagerClass*);
 	bool Render(D3DClass*, ShaderManagerClass*, TextureManagerClass*);
 
 private:
-	UserInterfaceClass* m_UserInterface;
 	CameraClass* m_Camera;
 	PositionClass* m_Position;
 	TerrainClass* m_Terrain;
-	bool m_displayUI, m_wireFrame;
+	bool m_wireFrame;
 	LightClass* m_Light;
 };
 

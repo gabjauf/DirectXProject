@@ -16,12 +16,6 @@
     <Filter Include="textures">
       <UniqueIdentifier>{a237530a-0745-4d30-9547-a758bf37965e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Models">
-      <UniqueIdentifier>{048590fe-43be-41cc-ab67-8c824f01e322}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="font">
-      <UniqueIdentifier>{a14d4c5c-d1cb-4725-9a75-f37a70301aba}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Fichiers de ressources">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -43,9 +37,6 @@
     <ClCompile Include="d3dclass.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="graphicsclass.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
     <ClCompile Include="inputclass.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
@@ -53,9 +44,6 @@
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="systemclass.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="modelclass.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="applicationclass.cpp">
@@ -67,12 +55,6 @@
     <ClCompile Include="zoneclass.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="timerclass.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="fpsclass.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
     <ClCompile Include="colorshaderclass.cpp">
       <Filter>Sources\Shaders</Filter>
     </ClCompile>
@@ -80,9 +62,6 @@
       <Filter>Sources\Shaders</Filter>
     </ClCompile>
     <ClCompile Include="textureshaderclass.cpp">
-      <Filter>Sources\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="fontshaderclass.cpp">
       <Filter>Sources\Shaders</Filter>
     </ClCompile>
     <ClCompile Include="cameraclass.cpp">
@@ -94,25 +73,19 @@
     <ClCompile Include="terrainclass.cpp">
       <Filter>Sources\Elements</Filter>
     </ClCompile>
-    <ClCompile Include="userinterfaceclass.cpp">
-      <Filter>Sources\Elements</Filter>
-    </ClCompile>
     <ClCompile Include="textureclass.cpp">
       <Filter>Sources\Elements</Filter>
     </ClCompile>
-    <ClCompile Include="textclass.cpp">
-      <Filter>Sources\Elements</Filter>
-    </ClCompile>
     <ClCompile Include="lightclass.cpp">
-      <Filter>Sources\Elements</Filter>
-    </ClCompile>
-    <ClCompile Include="fontclass.cpp">
       <Filter>Sources\Elements</Filter>
     </ClCompile>
     <ClCompile Include="diamondSquare.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="texturemanagerclass.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="timerclass.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -123,13 +96,7 @@
     <ClInclude Include="d3dclass.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="graphicsclass.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="inputclass.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="modelclass.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="applicationclass.h">
@@ -140,15 +107,6 @@
     </ClInclude>
     <ClInclude Include="zoneclass.h">
       <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="fpsclass.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="timerclass.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="fontshaderclass.h">
-      <Filter>Fichiers d%27en-tête\Shaders</Filter>
     </ClInclude>
     <ClInclude Include="colorshaderclass.h">
       <Filter>Fichiers d%27en-tête\Shaders</Filter>
@@ -165,19 +123,10 @@
     <ClInclude Include="lightclass.h">
       <Filter>Fichiers d%27en-tête\Elements</Filter>
     </ClInclude>
-    <ClInclude Include="fontclass.h">
-      <Filter>Fichiers d%27en-tête\Elements</Filter>
-    </ClInclude>
     <ClInclude Include="cameraclass.h">
       <Filter>Fichiers d%27en-tête\Elements</Filter>
     </ClInclude>
-    <ClInclude Include="textclass.h">
-      <Filter>Fichiers d%27en-tête\Elements</Filter>
-    </ClInclude>
     <ClInclude Include="textureclass.h">
-      <Filter>Fichiers d%27en-tête\Elements</Filter>
-    </ClInclude>
-    <ClInclude Include="userinterfaceclass.h">
       <Filter>Fichiers d%27en-tête\Elements</Filter>
     </ClInclude>
     <ClInclude Include="terrainclass.h">
@@ -189,19 +138,11 @@
     <ClInclude Include="texturemanagerclass.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="timerclass.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="model\cube.txt">
-      <Filter>Models</Filter>
-    </Text>
-    <Text Include="font\font01.txt">
-      <Filter>font</Filter>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="shader\font.vs">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="shader\light.ps">
       <Filter>Shaders</Filter>
     </None>
@@ -220,14 +161,8 @@
     <None Include="shader\color.vs">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="shader\font.ps">
-      <Filter>Shaders</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="font\font01.tga">
-      <Filter>font</Filter>
-    </Image>
     <Image Include="texture\stone01.tga">
       <Filter>textures</Filter>
     </Image>

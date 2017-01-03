@@ -193,7 +193,7 @@ bool TerrainClass::BuildTerrainModel()
 	incrementCount = m_terrainWidth / repeatTexture;
 
 	// Initialize the tu and tv coordinate values.
-	tuCoordinate = 0.0f;
+	tuCoordinate = 1.0f;
 	tvCoordinate = 1.0f;
 
 	// Initialize the tu and tv coordinate indexes.
@@ -265,7 +265,7 @@ bool TerrainClass::InitializeBuffers(ID3D11Device* device)
 	vertexData.SysMemPitch = 0;
 	vertexData.SysMemSlicePitch = 0;
 	
-	// Now create the vertex buffer.
+	// Create the vertex buffer with data from the terrain model
 	result = device->CreateBuffer(&vertexBufferDesc, &vertexData, &m_vertexBuffer);
 	if (FAILED(result))
 	{
@@ -280,7 +280,7 @@ bool TerrainClass::InitializeBuffers(ID3D11Device* device)
 	indexBufferDesc.MiscFlags = 0;
 	indexBufferDesc.StructureByteStride = 0;
 
-	// Create the index buffer.
+	// Create the index buffer with no initial data
 	result = device->CreateBuffer(&indexBufferDesc, NULL, &m_indexBuffer);
 	if (FAILED(result))
 	{

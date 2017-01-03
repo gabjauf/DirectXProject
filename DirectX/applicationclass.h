@@ -22,7 +22,6 @@ const float SCREEN_NEAR = 0.1f;
 #include "shadermanagerclass.h"
 #include "texturemanagerclass.h"
 #include "timerclass.h"
-#include "fpsclass.h"
 #include "zoneclass.h"
 
 
@@ -45,9 +44,8 @@ private:
 	InputClass* m_Input;
 	D3DClass* m_Direct3D;
 	ShaderManagerClass* m_ShaderManager;
-	TimerClass* m_Timer;
-	FpsClass* m_Fps;
 	TextureManagerClass* m_TextureManager;
+	TimerClass* m_Timer;
 	ZoneClass* m_Zone;
 };
 
