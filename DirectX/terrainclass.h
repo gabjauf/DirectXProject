@@ -60,7 +60,6 @@ public:
 
 	void Shutdown();
 	bool Render(ID3D11DeviceContext*, CameraClass*);
-	bool Render(ID3D11DeviceContext* deviceContext);
 
 	int GetIndexCount();
 
@@ -75,7 +74,6 @@ private:
 	bool InitializeBuffers(ID3D11Device*);
 	void ShutdownBuffers();
 	void RenderBuffers(ID3D11DeviceContext*, CameraClass*);
-	void RenderBuffers(ID3D11DeviceContext* deviceContext);
 	bool UpdateBuffers(ID3D11DeviceContext*, CameraClass*);
 
 	bool LoadDiamondSquareHeightMap();
@@ -88,7 +86,7 @@ private:
 	float m_heightScale;
 	char* m_terrainFilename;
 	HeightMapType* m_heightMap;
-	ModelType* m_terrainModel;
+	VertexType* m_terrainModel;
 };
 
 #endif

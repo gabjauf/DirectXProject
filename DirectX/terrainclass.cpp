@@ -92,14 +92,6 @@ bool TerrainClass::Render(ID3D11DeviceContext* deviceContext, CameraClass* camer
 	return true;
 }
 
-bool TerrainClass::Render(ID3D11DeviceContext* deviceContext)
-{
-	// Put the vertex and index buffers on the graphics pipeline to prepare them for drawing.
-	RenderBuffers(deviceContext);
-
-	return true;
-}
-
 
 int TerrainClass::GetIndexCount()
 {
@@ -180,96 +172,61 @@ bool TerrainClass::BuildTerrainModel()
 
 
 	// Calculate the number of vertices in the 3D terrain model.
-	m_vertexCount = (m_terrainHeight - 1) * (m_terrainWidth - 1) * 6;
+	m_vertexCount = (m_terrainHeight) * (m_terrainWidth);
 
 	// Create the 3D terrain model array.
-	m_terrainModel = new ModelType[m_vertexCount];
+	m_terrainModel = new VertexType[m_vertexCount];
 	if (!m_terrainModel)
 	{
 		return false;
 	}
 
-	// Initialize the index into the height map array.
-	index = 0;
+	int incrementCount, tuCount, tvCount;
+	float incrementValue, tuCoordinate, tvCoordinate;
 
-	// Load the 3D terrain model with the height map terrain data.
-	// We will be creating 2 triangles for each of the four points in a quad.
-	for (j = 0; j < (m_terrainHeight - 1); j++)
-	{
-		for (i = 0; i < (m_terrainWidth - 1); i++)
+	const int repeatTexture = 8;
+
+	// Calculate how much to increment the texture coordinates by.
+	incrementValue = (float) repeatTexture / (float)m_terrainWidth;
+
+	// Calculate how many times to repeat the texture.
+	incrementCount = m_terrainWidth / repeatTexture;
+
+	// Initialize the tu and tv coordinate values.
+	tuCoordinate = 0.0f;
+	tvCoordinate = 1.0f;
+
+	// Initialize the tu and tv coordinate indexes.
+	tuCount = 0;
+	tvCount = 0;
+
+	// Initialize the whole vertex array
+	for (int i = 0; i < m_terrainWidth; i++) {
+		for (int j = 0; j < m_terrainHeight; j++) {
+			int HM_index = (m_terrainWidth * j) + i;
+			m_terrainModel[HM_index].position = XMFLOAT3(m_heightMap[HM_index].x, m_heightMap[HM_index].y, m_heightMap[HM_index].z);
+			m_terrainModel[HM_index].texture = XMFLOAT2(tuCoordinate, tvCoordinate);
+			m_terrainModel[HM_index].normal = XMFLOAT3(m_heightMap[HM_index].nx, m_heightMap[HM_index].ny, m_heightMap[HM_index].nz);
+
+			tuCoordinate += incrementValue;
+			tuCount++;
+
+			if (tuCount == incrementCount)
+			{
+				tuCoordinate = 0.0f;
+				tuCount = 0;
+			}
+		}
+
+		// Increment the tv texture coordinate by the increment value and increment the index by one.
+		tvCoordinate -= incrementValue;
+		tvCount++;
+
+		// Check if at the top of the texture and if so then start at the bottom again.
+		if (tvCount == incrementCount)
 		{
-			// Get the indexes to the four points of the quad.
-			index1 = (m_terrainWidth * j) + i;          // Upper left.
-			index2 = (m_terrainWidth * j) + (i + 1);      // Upper right.
-			index3 = (m_terrainWidth * (j + 1)) + i;      // Bottom left.
-			index4 = (m_terrainWidth * (j + 1)) + (i + 1);  // Bottom right.
-
-															// Now create two triangles for that quad.
-															// Triangle 1 - Upper left.
-			m_terrainModel[index].x = m_heightMap[index1].x;
-			m_terrainModel[index].y = m_heightMap[index1].y;
-			m_terrainModel[index].z = m_heightMap[index1].z;
-			m_terrainModel[index].tu = 0.0f;
-			m_terrainModel[index].tv = 0.0f;
-			m_terrainModel[index].nx = m_heightMap[index1].nx;
-			m_terrainModel[index].ny = m_heightMap[index1].ny;
-			m_terrainModel[index].nz = m_heightMap[index1].nz;
-			index++;
-
-			// Triangle 1 - Upper right.
-			m_terrainModel[index].x = m_heightMap[index2].x;
-			m_terrainModel[index].y = m_heightMap[index2].y;
-			m_terrainModel[index].z = m_heightMap[index2].z;
-			m_terrainModel[index].tu = 1.0f;
-			m_terrainModel[index].tv = 0.0f;
-			m_terrainModel[index].nx = m_heightMap[index2].nx;
-			m_terrainModel[index].ny = m_heightMap[index2].ny;
-			m_terrainModel[index].nz = m_heightMap[index2].nz;
-			index++;
-
-			// Triangle 1 - Bottom left.
-			m_terrainModel[index].x = m_heightMap[index3].x;
-			m_terrainModel[index].y = m_heightMap[index3].y;
-			m_terrainModel[index].z = m_heightMap[index3].z;
-			m_terrainModel[index].tu = 0.0f;
-			m_terrainModel[index].tv = 1.0f;
-			m_terrainModel[index].nx = m_heightMap[index3].nx;
-			m_terrainModel[index].ny = m_heightMap[index3].ny;
-			m_terrainModel[index].nz = m_heightMap[index3].nz;
-			index++;
-
-			// Triangle 2 - Bottom left.
-			m_terrainModel[index].x = m_heightMap[index3].x;
-			m_terrainModel[index].y = m_heightMap[index3].y;
-			m_terrainModel[index].z = m_heightMap[index3].z;
-			m_terrainModel[index].tu = 0.0f;
-			m_terrainModel[index].tv = 1.0f;
-			m_terrainModel[index].nx = m_heightMap[index3].nx;
-			m_terrainModel[index].ny = m_heightMap[index3].ny;
-			m_terrainModel[index].nz = m_heightMap[index3].nz;
-			index++;
-
-			// Triangle 2 - Upper right.
-			m_terrainModel[index].x = m_heightMap[index2].x;
-			m_terrainModel[index].y = m_heightMap[index2].y;
-			m_terrainModel[index].z = m_heightMap[index2].z;
-			m_terrainModel[index].tu = 1.0f;
-			m_terrainModel[index].tv = 0.0f;
-			m_terrainModel[index].nx = m_heightMap[index2].nx;
-			m_terrainModel[index].ny = m_heightMap[index2].ny;
-			m_terrainModel[index].nz = m_heightMap[index2].nz;
-			index++;
-
-			// Triangle 2 - Bottom right.
-			m_terrainModel[index].x = m_heightMap[index4].x;
-			m_terrainModel[index].y = m_heightMap[index4].y;
-			m_terrainModel[index].z = m_heightMap[index4].z;
-			m_terrainModel[index].tu = 1.0f;
-			m_terrainModel[index].tv = 1.0f;
-			m_terrainModel[index].nx = m_heightMap[index4].nx;
-			m_terrainModel[index].ny = m_heightMap[index4].ny;
-			m_terrainModel[index].nz = m_heightMap[index4].nz;
-			index++;
+			tvCoordinate = 1.0f;
+			tvCount = 0;
 		}
 	}
 
@@ -279,18 +236,16 @@ bool TerrainClass::BuildTerrainModel()
 void TerrainClass::ShutdownTerrainModel()
 {
 	// Release the terrain model data.
-/*	if (m_terrainModel)
+	if (m_terrainModel)
 	{
 		delete[] m_terrainModel;
 		m_terrainModel = 0;
 	}
-	*/
 	return;
 }
 
 bool TerrainClass::InitializeBuffers(ID3D11Device* device)
 {
-	VertexType* vertices;
 	unsigned long* indices;
 	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
 	D3D11_SUBRESOURCE_DATA vertexData, indexData;
@@ -298,20 +253,20 @@ bool TerrainClass::InitializeBuffers(ID3D11Device* device)
 	XMFLOAT4 color;
 
 	// Set up the description of the static vertex buffer.
-	vertexBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	vertexBufferDesc.ByteWidth = sizeof(VertexType) * m_vertexCount;
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	vertexBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	vertexBufferDesc.CPUAccessFlags = 0;
 	vertexBufferDesc.MiscFlags = 0;
 	vertexBufferDesc.StructureByteStride = 0;
 
 	// Give the subresource structure a pointer to the vertex data.
-	//vertexData.pSysMem = vertices;
-	//vertexData.SysMemPitch = 0;
-	//vertexData.SysMemSlicePitch = 0;
+	vertexData.pSysMem = m_terrainModel;
+	vertexData.SysMemPitch = 0;
+	vertexData.SysMemSlicePitch = 0;
 	
 	// Now create the vertex buffer.
-	result = device->CreateBuffer(&vertexBufferDesc, NULL, &m_vertexBuffer);
+	result = device->CreateBuffer(&vertexBufferDesc, &vertexData, &m_vertexBuffer);
 	if (FAILED(result))
 	{
 		return false;
@@ -325,24 +280,12 @@ bool TerrainClass::InitializeBuffers(ID3D11Device* device)
 	indexBufferDesc.MiscFlags = 0;
 	indexBufferDesc.StructureByteStride = 0;
 
-	// Give the subresource structure a pointer to the index data.
-	//indexData.pSysMem = indices;
-	//indexData.SysMemPitch = 0;
-	//indexData.SysMemSlicePitch = 0;
-
 	// Create the index buffer.
 	result = device->CreateBuffer(&indexBufferDesc, NULL, &m_indexBuffer);
 	if (FAILED(result))
 	{
 		return false;
 	}
-
-	// Release the arrays now that the buffers have been created and loaded.
-	//delete[] vertices;
-	//vertices = 0;
-	//
-	//delete[] indices;
-	//indices = 0;
 
 	return true;
 }
@@ -395,51 +338,13 @@ void TerrainClass::RenderBuffers(ID3D11DeviceContext* deviceContext, CameraClass
 	return;
 }
 
-void TerrainClass::RenderBuffers(ID3D11DeviceContext* deviceContext)
-{
-	unsigned int stride;
-	unsigned int offset;
-
-
-	// Set vertex buffer stride and offset.
-	stride = sizeof(VertexType);
-	offset = 0;
-
-	// Set the vertex buffer to active in the input assembler so it can be rendered.
-	deviceContext->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
-
-	// Set the index buffer to active in the input assembler so it can be rendered.
-	deviceContext->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
-
-	// Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
-	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	return;
-}
-
 bool TerrainClass::UpdateBuffers(ID3D11DeviceContext* deviceContext, CameraClass* camera)
 {
-	VertexType* vertices;
 	unsigned long* indices;
-	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
-	D3D11_MAPPED_SUBRESOURCE vertexData, indexData;
-	XMFLOAT4 color;
-
-	// Set the color of the terrain grid.
-	color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-
-	// Calculate the number of vertices in the terrain.
-	m_vertexCount = m_terrainWidth * m_terrainHeight;
+	D3D11_MAPPED_SUBRESOURCE indexData;
 
 	// Set the index count to the same as the vertex count.
 	m_indexCount = m_vertexCount * 2;
-
-	// Create the vertex array.
-	vertices = new VertexType[m_vertexCount];
-	if (!vertices)
-	{
-		return false;
-	}
 
 	// Create the index array.
 	indices = new unsigned long[m_indexCount];
@@ -449,16 +354,6 @@ bool TerrainClass::UpdateBuffers(ID3D11DeviceContext* deviceContext, CameraClass
 	}
 
 	XMFLOAT3 cameraPosition = camera->GetPosition();
-
-	// Initialize the whole vertex array
-	for (int i = 0; i < m_terrainWidth; i++) {
-		for (int j = 0; j < m_terrainHeight; j++) {
-			int HM_index = (m_terrainWidth * j) + i;
-			vertices[HM_index].position = XMFLOAT3(m_heightMap[HM_index].x, m_heightMap[HM_index].y, m_heightMap[HM_index].z);
-			vertices[HM_index].texture = XMFLOAT2(m_terrainModel[HM_index].tu, m_terrainModel[HM_index].tv);
-			vertices[HM_index].normal = XMFLOAT3(m_terrainModel[HM_index].nx, m_terrainModel[HM_index].ny, m_terrainModel[i].nz);
-		}
-	}
 
 	int LOD = 100;
 	int index = 0;
@@ -844,11 +739,11 @@ bool TerrainClass::UpdateBuffers(ID3D11DeviceContext* deviceContext, CameraClass
 	}
 
 	//	Disable GPU access to the vertex buffer data.
-	deviceContext->Map(m_vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &vertexData);
+	//deviceContext->Map(m_vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &vertexData);
 	//	Update the vertex buffer here.
-	memcpy(vertexData.pData, vertices, sizeof(VertexType) * m_vertexCount);
+	//memcpy(vertexData.pData, vertices, sizeof(VertexType) * m_vertexCount);
 	//	Reenable GPU access to the vertex buffer data.
-	deviceContext->Unmap(m_vertexBuffer, 0);
+	//deviceContext->Unmap(m_vertexBuffer, 0);
 
 	//	Disable GPU access to the vertex buffer data.
 	deviceContext->Map(m_indexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &indexData);
@@ -858,8 +753,8 @@ bool TerrainClass::UpdateBuffers(ID3D11DeviceContext* deviceContext, CameraClass
 	deviceContext->Unmap(m_indexBuffer, 0);
 
 	// Release the arrays now that the buffers have been created and loaded.
-	delete[] vertices;
-	vertices = 0;
+	//delete[] vertices;
+	//vertices = 0;
 
 	delete[] indices;
 	indices = 0;
